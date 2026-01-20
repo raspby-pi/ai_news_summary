@@ -108,7 +108,7 @@ with st.sidebar:
             with st.form("signup"):
                 nid = st.text_input("아이디")
                 npw = st.text_input("비밀번호", type="password")
-                nge = st.text_input("Gemini API Key")
+                nge = st.text_input("Gemini API Key (선택)")
                 noa = st.text_input("GPT API Key (선택)")
                 if st.form_submit_button("가입하기"):
                     df = load_user_data()
