@@ -44,14 +44,50 @@ def render_notice_manager(conn):
         # 최신순 정렬
         notice_df = notice_df.sort_values(by="created_at", ascending=False)
         for idx, row in notice_df.iterrows():
-            col1, col2 = st.columns([7, 1])
-            with col1:
-                with st.expander(f"📌 {row['title']} ({row['created_at']})"):
-                    st.write(row['content'])
-            with col2:
-                if st.button("삭제", key=f"del_notice_{idx}"):
-                    # 해당 인덱스 삭제 후 업데이트
-                    updated_df = notice_df.drop(idx)
-                    conn.update(worksheet="Notice", data=updated_df)
-                    st.toast("🗑️ 공지사항이 삭제되었습니다.")
-                    st.rerun()
+            # 각 공지사항별 컨테이너
+            with st.container():
+                col1, col2, col3 = st.columns([6, 1, 1])
+
+                with col1:
+                    st.markdown(f"**{row['title']}**")
+                    st.caption(f"작성일: {row['created_at']}")
+
+                with col2:
+                    # 수정 버튼: 클릭 시 세션 상태에 수정 모드 활성화
+                    edit_mode_key = f"edit_mode_{idx}"
+                    if st.button("수정", key=f"btn_edit_{idx}"):
+                        st.session_state[edit_mode_key] = True
+
+                with col3:
+                    # 삭제 버튼
+                    if st.button("삭제", key=f"btn_del_{idx}"):
+                        updated_df = notice_df.drop(idx)
+                        conn.update(worksheet="Notice", data=updated_df)
+                        st.toast("🗑️ 공지사항이 삭제되었습니다.")
+                        st.rerun()
+
+                # 수정 모드 활성화 시 입력 폼 등장
+                if st.session_state.get(edit_mode_key, False):
+                    with st.form(key=f"edit_form_{idx}"):
+                        edit_title = st.text_input("제목 수정", value=row['title'])
+                        edit_content = st.text_area("내용 수정", value=row['content'], height=150)
+
+                        col_f1, col_f2 = st.columns([1, 1])
+                        with col_f1:
+                            if st.form_submit_button("💾 변경사항 저장"):
+                                # 데이터 업데이트
+                                notice_df.at[idx, 'title'] = edit_title
+                                notice_df.at[idx, 'content'] = edit_content
+                                # (선택사항) 수정 시간으로 업데이트하고 싶다면 아래 주석 해제
+                                # notice_df.at[idx, 'created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                                conn.update(worksheet="Notice", data=notice_df)
+                                st.session_state[edit_mode_key] = False
+                                st.success("✅ 수정이 완료되었습니다.")
+                                st.rerun()
+                        with col_f2:
+                            if st.form_submit_button("취소"):
+                                st.session_state[edit_mode_key] = False
+                                st.rerun()
+
+                st.markdown("---")

@@ -150,6 +150,22 @@ with st.sidebar:
 # --- 메인 컨텐츠 제어 --- #
 if st.session_state.logged_in:
     if selected_page == "뉴스 대시보드":
+        # --- [추가] 최상단 공지사항 노출 로직 ---
+        try:
+            # Notice 워크시트에서 데이터 로드 (가장 최신 것이 첫 번째로 오게 정렬됨)
+            notice_df = conn.read(worksheet="Notice", ttl=0)
+            if not notice_df.empty:
+                # 최신순으로 정렬 후 첫 번째 행 가져오기
+                latest_notice = notice_df.sort_values(by="created_at", ascending=False).iloc[0]
+
+                # 메인 컨텐츠 최상단에 강조된 박스로 표시
+                st.info(f"📢 **최신 공지**: {latest_notice['title']} ({latest_notice['created_at']})")
+                with st.expander("공지 내용 상세보기"):
+                    st.write(latest_notice['content'])
+                st.markdown("<br>", unsafe_allow_html=True) # 약간의 여백
+        except Exception as e:
+            # 시트가 없거나 읽기 오류 시 무시 (사용자 경험 방해 금지)
+            pass
         render_news_section()
     elif selected_page == "1:1 질문":
         render_qna_page(conn) # QnA 페이지 호출
