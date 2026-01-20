@@ -1,0 +1,114 @@
+/* 1. 상단 헤더 영역 투명화 및 높이 조정 */
+[data-testid="stHeader"] {
+    background-color: rgba(0,0,0,0) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. Deploy 버튼 및 관련 컨테이너 완전 삭제 (mypage 포함 전역) */
+.stAppDeployButton,
+div[data-testid="stAppDeployButton"],
+button[kind="header"] {
+    display: none !important;
+}
+
+/* 3. 메인 메뉴(점 세개) 및 관련 컨테이너 완전 삭제 */
+#MainMenu,
+[data-testid="stMainMenu"],
+.st-emotion-cache-czk5ss {
+    display: none !important;
+}
+
+/* 4. 하단 푸터 삭제 */
+footer {
+    display: none !important;
+}
+
+/* 5. 사이드바 열기/닫기 버튼(왼쪽)만 살리기 */
+/* 위에서 버튼을 지웠으므로 왼쪽 버튼은 명시적으로 보이게 설정 */
+[data-testid="stHeader"] button[data-testid="stBaseButton-headerNoPadding"] {
+    display: inline-flex !important;
+}
+
+/* 1. 전체 앱 배경 흰색 */
+.stApp {
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+}
+
+/* 2. 가장 바깥쪽 파란색 테두리 및 기본 컨테이너 선 제거 */
+[data-testid="stVerticalBlock"] > div {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 3. 사이드바 스타일 유지 (하늘색 배경) */
+[data-testid="stSidebar"] {
+    background-color: #E3F2FD !important;
+}
+[data-testid="stSidebar"] .stMarkdown p {
+    color: #0D47A1 !important;
+    font-weight: bold;
+}
+
+/* 4. Gemini 전용 섹션 (파란색 박스 강조) */
+div[data-testid="stVerticalBlock"]:has(div.gemini-container-marker) {
+    background-color: #F0F7FF !important;
+    border-radius: 15px !important;
+    padding: 30px !important;
+    margin-bottom: 30px !important;
+    border: 2px solid #3B82F6 !important; /* 안쪽 박스 테두리만 유지 */
+}
+
+/* 5. 텍스트 가독성 설정 */
+h1, h3 { color: #111827 !important; }
+p, span, b { color: #374151 !important; }
+
+/* 파란 박스 내부 텍스트는 좀 더 진한 파란색으로 */
+div[data-testid="stVerticalBlock"]:has(div.gemini-container-marker) h3,
+div[data-testid="stVerticalBlock"]:has(div.gemini-container-marker) p,
+div[data-testid="stVerticalBlock"]:has(div.gemini-container-marker) b {
+    color: #1E3A8A !important;
+}
+
+/* 6. 입력창 디자인 */
+input[type="password"] {
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+}
+
+/* 7. 버튼 디자인 (하단 배치 및 전체 너비) */
+div.stButton > button {
+    width: 100% !important;
+    margin-top: 15px !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    height: 45px !important;
+    border: none !important;
+}
+
+button[key="btn_gemini"] { background-color: #2563EB !important; color: white !important; }
+button[key="btn_gpt"] { background-color: #10B981 !important; color: white !important; }
+button[key="btn_pw"] { background-color: #EF4444 !important; color: white !important; }
+
+[data-testid="stSidebarNav"] span.eof1nuh6 {
+    font-size: 22px !important;    /* 글씨 크기 (원하는 대로 조절) */
+    font-weight: 700 !important;    /* 글씨 굵기 */
+    color: #1E3A8A !important;      /* 진한 파란색으로 가독성 향상 */
+    margin-left: 10px !important;   /* 왼쪽 여백 추가 */
+}
+
+/* 메뉴 항목 간의 간격을 넓히고 싶을 때 */
+[data-testid="stSidebarNavItems"] li {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* 현재 선택된 메뉴의 하이라이트 효과 강화 (선택사항) */
+[data-testid="stSidebarNavLink"][aria-current="page"] {
+    background-color: #DBEAFE !important; /* 연한 파란색 배경 */
+    border-radius: 10px !important;
+}
