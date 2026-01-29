@@ -70,6 +70,8 @@ if url_token and not st.session_state.logged_in:
 
 # --- 사이드바 (로그인/회원가입) --- #
 with st.sidebar:
+    st.write(f"🕒 서버 현재 시간(UTC 추정): {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    st.write(f"🇰🇷 한국 시간(KST): {(datetime.now() + timedelta(hours=9)).strftime('%Y-%m-%d %H:%M:%S')}")
     st.title("👤 멤버십")
     if not st.session_state.logged_in:
         menu = st.radio("메뉴 선택", ["로그인", "회원가입"])
@@ -85,9 +87,14 @@ with st.sidebar:
                             # 1. 고유 세션 토큰 생성 (보안 강화)
                             new_token = secrets.token_urlsafe(32)
 
+                            # 2. [핵심 수정] 한국 시간(KST) 계산
+                            # 서버 시간(UTC)에 9시간을 더해 한국 시간으로 맞춥니다.
+                            kst_now = datetime.now() + timedelta(hours=9)
+                            kst_now_str = kst_now.strftime("%Y-%m-%d %H:%M:%S")
+
                             # 2. [DB 업데이트] 토큰과 마지막 로그인 시간 저장
                             df.loc[df['username'] == uid, 'session_token'] = new_token
-                            df.loc[df['username'] == uid, 'last_login'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            df.loc[df['username'] == uid, 'last_login'] = kst_now_str
                             conn.update(worksheet="Users", data=df)
 
                             # 3. 세션 업데이트
