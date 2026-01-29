@@ -10,4 +10,3 @@ google-genai
 google-auth>=2.15.0,<2.42.0
 requests          # 네이버 API 호출 및 웹 데이터 수집 (반드시 필요)
 toml              # st.secrets 설정 파일을 읽기 위한 라이브러리
-chromadb
