@@ -70,8 +70,6 @@ if url_token and not st.session_state.logged_in:
 
 # --- 사이드바 (로그인/회원가입) --- #
 with st.sidebar:
-    st.write(f"🕒 서버 현재 시간(UTC 추정): {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    st.write(f"🇰🇷 한국 시간(KST): {(datetime.now() + timedelta(hours=9)).strftime('%Y-%m-%d %H:%M:%S')}")
     st.title("👤 멤버십")
     if not st.session_state.logged_in:
         menu = st.radio("메뉴 선택", ["로그인", "회원가입"])
