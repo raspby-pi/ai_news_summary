@@ -15,6 +15,12 @@ import streamlit.components.v1 as components
 # [중요] 방금 만든 파일에서 함수 불러오기
 from news_dashboard import render_news_section
 
+st.set_page_config(
+    page_title="AI 뉴스 요약 서비스", # 구글 검색 결과에 나올 제목
+    page_icon="📰",                # 브라우저 탭 아이콘
+    layout="wide"
+)
+
 components.html(
     """
     <script>
@@ -25,12 +31,6 @@ components.html(
     </script>
     """,
     height=0,
-)
-
-st.set_page_config(
-    page_title="AI 뉴스 요약 서비스", # 구글 검색 결과에 나올 제목
-    page_icon="📰",                # 브라우저 탭 아이콘
-    layout="wide"
 )
 
 def local_css(file_name):
