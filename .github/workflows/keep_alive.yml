@@ -1,0 +1,15 @@
+name: Keep Streamlit Alive
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # 수동으로도 실행할 수 있게 버튼을 만듭니다.
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit App
+        run: |
+          # 본인의 Streamlit 앱 주소로 변경하세요.
+          curl -I https://ai-news-summary.streamlit.app/
