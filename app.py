@@ -22,18 +22,17 @@ st.set_page_config(
 )
 
 def add_ga_script():
-    ga_id = "G-XXXXXXXXXX"  # 본인의 GA ID로 변경
-    script = f"""
+    # f를 제거하여 일반 문자열로 만듭니다. 중괄호 에러가 사라집니다.
+    script = """
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-M6MYMZ3T5L"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-
           gtag('config', 'G-M6MYMZ3T5L');
         </script>
     """
-    # st.components를 사용하여 HTML 삽입
+    # st.components를 사용하여 HTML 삽입 (이 코드는 여전히 iframe 내부에서 실행됩니다)
     components.html(script, height=0)
 
 add_ga_script()
