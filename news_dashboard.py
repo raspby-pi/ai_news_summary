@@ -28,11 +28,16 @@ def display_news_cards(df, market_key):
         with st.container():
             pub_time = row["published"].strftime("%m/%d %H:%M")
             st.markdown(
-                f'<div class="news-card">'
-                f'<h3>{row["title"]}</h3>'
-                f'<p style="color:#6B7280; font-size:0.9rem;">{row["published"].strftime("%Y-%m-%d %H:%M")} | '
-                f'<a href="{row["link"]}" target="_blank" style="color:#3B82F6;">기사 원문</a></p>'
-                f'</div>',
+                f'''
+                <div class="news-card">
+                    <a href="{row["link"]}" target="_blank" style="text-decoration:none; color:inherit;">
+                        <h3 style="margin-bottom:5px;">{row["title"]}</h3>
+                    </a>
+                    <p style="color:#6B7280; font-size:0.9rem;">
+                        📅 {row["published"].strftime("%Y-%m-%d %H:%M")} | 🏢 주요 언론사 뉴스
+                    </p>
+                </div>
+                ''',
                 unsafe_allow_html=True
             )
 
@@ -49,7 +54,13 @@ def display_news_cards(df, market_key):
 
 # --- 메인 뉴스 화면 렌더링 함수 ---
 def render_news_section():
-    st.title("📈 증시 핵심 요약 대시보드")
+    st.title("🤖 AI 실시간 증시 뉴스 및 핵심 요약 대시보드")
+
+    # 로봇이 페이지 성격을 파악하도록 짧은 요약문 추가
+    st.markdown("""
+    이 대시보드는 **국내 및 미국 증시 뉴스**를 실시간으로 수집하고,
+    **Gemini AI**를 통해 투자 포인트를 분석하여 제공합니다.
+    """)
 
     # 1단계 메인 탭: 국내장, 미국장
     tab_kor, tab_usa, tab_search = st.tabs(["🇰🇷 국내장", "🇺🇸 미국장", "🔍 뉴스 검색"])

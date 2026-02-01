@@ -16,17 +16,21 @@ import streamlit.components.v1 as components
 from news_dashboard import render_news_section
 
 st.set_page_config(
-    page_title="AI 뉴스 요약 서비스", # 구글 검색 결과에 나올 제목
-    page_icon="📰",                # 브라우저 탭 아이콘
-    layout="wide"
+    page_title="AI 실시간 뉴스 요약 서비스 | 증시 핵심 이슈 분석", # 검색 결과에 노출될 제목
+    page_icon="📰",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://rasbpy-pi.github.io/ai-news-summary-site-portal/',
+        'Report a bug': None,
+        'About': "# AI 뉴스 요약 서비스\n매일의 증시 소식을 AI가 핵심만 요약해 드립니다."
+    }
 )
 
 def local_css(file_name):
     with open(file_name, encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# 페이지 설정 직후 호출
-st.set_page_config(page_title="증시 핵심 요약", layout="wide")
 local_css("style_global.css")
 
 load_dotenv()
