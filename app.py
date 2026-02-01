@@ -11,6 +11,7 @@ from qna_page import render_qna_page
 from mypage import render_mypage
 from notice_page import render_notice_manager
 import streamlit.components.v1 as components
+import os
 
 # [중요] 방금 만든 파일에서 함수 불러오기
 from news_dashboard import render_news_section
@@ -58,11 +59,67 @@ if 'logged_in' not in st.session_state:
     })
 
 # ---------------------------------------------------------
+# [신규] 방문자 수 카운트 로직 (Visitors)
+# ---------------------------------------------------------
+def track_daily_visitor():
+    # [1] 세션 상태 확인 (가장 중요: 이 세션에서 이미 카운트했다면 즉시 종료)
+    if st.session_state.get('visitor_counted') is True:
+        return
+
+    # [2] 환경변수(Github Actions) 확인
+    if os.environ.get('GITHUB_ACTIONS') == 'true':
+        return
+
+    # [3] 관리자 여부 확인
+    # 주의: 이 함수는 반드시 '로그인 로직'보다 아래에서 실행되어야 함
+    if st.session_state.get('is_admin', False):
+        return
+
+    try:
+        # 오늘 날짜 (문자열)
+        today_date = datetime.now().strftime("%Y-%m-%d")
+
+        # --- 시트 데이터 읽기 및 업데이트 로직 ---
+        try:
+            df_visit = conn.read(worksheet="Visitors", ttl=0)
+        except:
+            df_visit = pd.DataFrame(columns=['date', 'count'])
+
+        if df_visit.empty or 'date' not in df_visit.columns:
+            df_visit = pd.DataFrame({'date': [today_date], 'count': [1]})
+        else:
+            # 날짜 컬럼 문자열 변환 (타입 불일치 방지)
+            df_visit['date'] = df_visit['date'].astype(str)
+
+            if today_date in df_visit['date'].values:
+                # 오늘 날짜 행 찾아서 +1
+                # (SettingWithCopyWarning 방지를 위해 인덱스 활용)
+                idx = df_visit.index[df_visit['date'] == today_date].tolist()[0]
+                current_cnt = int(df_visit.at[idx, 'count'])
+                df_visit.at[idx, 'count'] = current_cnt + 1
+            else:
+                # 새 날짜 추가
+                new_row = pd.DataFrame({'date': [today_date], 'count': [1]})
+                df_visit = pd.concat([df_visit, new_row], ignore_index=True)
+
+        conn.update(worksheet="Visitors", data=df_visit)
+
+        # [4] 카운트 완료 플래그 설정 (이게 있어야 새로고침 시 중복 안 됨)
+        st.session_state['visitor_counted'] = True
+
+    except Exception as e:
+        # 에러 발생 시에도 플래그는 True로 해서 무한 재시도 방지
+        st.session_state['visitor_counted'] = True
+        print(f"Visitor Tracking Error: {e}")
+
+# ---------------------------------------------------------
 # [수정 핵심] URL 파라미터를 이용한 자동 로그인 로직
 # ---------------------------------------------------------
 # 주소창에 ?token=... 이 있는지 확인
 query_params = st.query_params
 url_token = query_params.get("token")
+# [실행] 방문자 추적 함수 호출
+track_daily_visitor()
 
 if url_token and not st.session_state.logged_in:
     df = load_user_data()
