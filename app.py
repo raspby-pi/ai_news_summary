@@ -14,6 +14,24 @@ from notice_page import render_notice_manager
 # [중요] 방금 만든 파일에서 함수 불러오기
 from news_dashboard import render_news_section
 
+components.html(
+    """
+    <script>
+        var meta = document.createElement('meta');
+        meta.name = "google-site-verification";
+        meta.content = "bsw-b6GuWL7Lt2xAUa1pFlSF65xYdoxBJHlIP6JgQ6Y";
+        document.getElementsByTagName('head')[0].appendChild(meta);
+    </script>
+    """,
+    height=0,
+)
+
+st.set_page_config(
+    page_title="AI 뉴스 요약 서비스", # 구글 검색 결과에 나올 제목
+    page_icon="📰",                # 브라우저 탭 아이콘
+    layout="wide"
+)
+
 def local_css(file_name):
     with open(file_name, encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
