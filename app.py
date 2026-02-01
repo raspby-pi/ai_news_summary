@@ -10,6 +10,7 @@ from admin_page import render_admin_page
 from qna_page import render_qna_page
 from mypage import render_mypage
 from notice_page import render_notice_manager
+import streamlit.components.v1 as components
 
 # [중요] 방금 만든 파일에서 함수 불러오기
 from news_dashboard import render_news_section
