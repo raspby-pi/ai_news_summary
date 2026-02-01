@@ -21,22 +21,6 @@ st.set_page_config(
     layout="wide"
 )
 
-def add_ga_script():
-    # f를 제거하여 일반 문자열로 만듭니다. 중괄호 에러가 사라집니다.
-    script = """
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-M6MYMZ3T5L"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-M6MYMZ3T5L');
-        </script>
-    """
-    # st.components를 사용하여 HTML 삽입 (이 코드는 여전히 iframe 내부에서 실행됩니다)
-    components.html(script, height=0)
-
-add_ga_script()
-
 def local_css(file_name):
     with open(file_name, encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
