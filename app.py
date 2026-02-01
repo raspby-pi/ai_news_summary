@@ -21,16 +21,22 @@ st.set_page_config(
     layout="wide"
 )
 
-components.html(
+def add_ga_script():
+    ga_id = "G-XXXXXXXXXX"  # 본인의 GA ID로 변경
+    script = f"""
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-M6MYMZ3T5L"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-M6MYMZ3T5L');
+        </script>
     """
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TV88SBZR');</script>
-    """,
-    height=0,
-)
+    # st.components를 사용하여 HTML 삽입
+    components.html(script, height=0)
+
+add_ga_script()
 
 def local_css(file_name):
     with open(file_name, encoding="utf-8") as f:
